@@ -27,7 +27,7 @@ type resetRecipientPasswordBody = z.infer<
   typeof resetRecipientPasswordBodySchema
 >
 
-@Controller('/recipient/reset-password')
+@Controller('/reset-password')
 export class ResetPasswordRecipientController {
   constructor(private resetRecipientPassword: ResetRecipientPasswordUseCase) {}
 

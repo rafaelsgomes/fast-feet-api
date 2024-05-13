@@ -7,6 +7,7 @@ import { RecipientFactory } from 'test/factories/makeRecipient'
 import { JwtService } from '@nestjs/jwt'
 import { PrismaService } from '@/infra/database/prisma.service'
 import { AdminFactory } from 'test/factories/makeAdmin'
+import { compare } from 'bcryptjs'
 
 describe('Reset recipient password  (E2E)', () => {
   let app: INestApplication
@@ -31,7 +32,7 @@ describe('Reset recipient password  (E2E)', () => {
     await app.init()
   })
 
-  test(`[PATCH] /admin/recipient/reset-password`, async () => {
+  test(`[PATCH] /recipient/reset-password`, async () => {
     const admin = await adminFactory.makePrismaAdmin()
 
     const recipient = await recipientFactory.makePrismaRecipient({
@@ -42,7 +43,7 @@ describe('Reset recipient password  (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .patch('/admin/recipient/reset-password')
+      .patch('/recipient/reset-password')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         recipientId: recipient.id,
@@ -57,7 +58,10 @@ describe('Reset recipient password  (E2E)', () => {
       },
     })
 
+    const passwordIsValid = compare('johnDoe123', recipientOnDatabase.password)
+
     expect(recipientOnDatabase.updatedAt).toBeTruthy()
+    expect(passwordIsValid).toBeTruthy()
   })
 
   afterAll(async () => {

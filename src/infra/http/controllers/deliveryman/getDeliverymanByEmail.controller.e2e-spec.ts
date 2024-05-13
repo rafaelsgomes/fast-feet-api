@@ -28,7 +28,7 @@ describe('Get Deliveryman (E2E)', () => {
     await app.init()
   })
 
-  test(`[GET] /admin/deliveryman/email?email=john@doe.com`, async () => {
+  test(`[GET] /deliveryman/email?email=john@doe.com`, async () => {
     const admin = await adminFactory.makePrismaAdmin()
 
     const deliveryman = await deliverymanFactory.makePrismaDeliveryman({
@@ -40,7 +40,7 @@ describe('Get Deliveryman (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .get(`/admin/deliveryman/email`)
+      .get(`/deliveryman/email`)
       .query({
         email: deliveryman.email,
       })

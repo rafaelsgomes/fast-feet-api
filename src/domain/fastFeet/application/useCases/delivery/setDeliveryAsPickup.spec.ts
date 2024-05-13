@@ -7,20 +7,29 @@ import { makeDeliveryman } from 'test/factories/makeDeliveryman'
 import { UserNotFoundError } from '../_errors/userNotFoundError'
 import { DeliveryIsNotAvailableError } from '../_errors/deliveryIsNotAvailableError'
 import { InMemoryDeliveriesAttachmentsRepository } from 'test/repositories/inMemoryDeliveriesAttachmentsRepository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/inMemoryAttachmentsRepository'
+import { InMemoryRecipientRepository } from 'test/repositories/inMemoryRecipientRepository'
 
 let repository: InMemoryDeliveriesRepository
-let deliverymanRepository: InMemoryDeliverymanRepository
 let deliveriesAttachmentsRepository: InMemoryDeliveriesAttachmentsRepository
+let attachmentsRepository: InMemoryAttachmentsRepository
+let deliverymanRepository: InMemoryDeliverymanRepository
+let recipientsRepository: InMemoryRecipientRepository
 let sut: SetDeliveryAsPickupUseCase
 
 describe('Set a delivery as pickup', () => {
   beforeEach(() => {
     deliveriesAttachmentsRepository =
       new InMemoryDeliveriesAttachmentsRepository()
+    attachmentsRepository = new InMemoryAttachmentsRepository()
+    deliverymanRepository = new InMemoryDeliverymanRepository()
+    recipientsRepository = new InMemoryRecipientRepository()
     repository = new InMemoryDeliveriesRepository(
       deliveriesAttachmentsRepository,
+      attachmentsRepository,
+      deliverymanRepository,
+      recipientsRepository,
     )
-    deliverymanRepository = new InMemoryDeliverymanRepository()
     sut = new SetDeliveryAsPickupUseCase(repository, deliverymanRepository)
   })
   it('should be able set a delivery as pickup', async () => {

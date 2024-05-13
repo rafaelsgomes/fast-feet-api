@@ -22,7 +22,7 @@ export class InMemoryDeliveriesAttachmentsRepository
     deliveryId: string,
   ): Promise<DeliveryAttachment[]> {
     const deliveryAttachments = this.items.filter(
-      (item) => item.deliveryId.toString() === deliveryId,
+      (item) => item.deliveryId === deliveryId,
     )
 
     return deliveryAttachments

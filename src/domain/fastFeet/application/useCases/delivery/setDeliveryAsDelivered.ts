@@ -4,6 +4,9 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resourceNotFoundErro
 import { NotAllowedError } from '../_errors/notAllowedError'
 import { DeliveryAttachment } from '@/domain/fastFeet/enterprise/entities/deliveryAttachment'
 import { DeliveryAttachmentList } from '@/domain/fastFeet/enterprise/entities/deliveryAttachmentsList'
+import { Injectable } from '@nestjs/common'
+import { IAttachmentsRepository } from '../../repositories/IAttachmentsRepository'
+import { AttachmentsNotFoundError } from '../_errors/attachmentsNotFoundError'
 
 interface SetDeliveryAsDeliveredRequest {
   deliveryId: string
@@ -14,9 +17,12 @@ interface SetDeliveryAsDeliveredRequest {
 interface SetDeliveryAsDeliveredResponse {
   delivery: Delivery
 }
-
+@Injectable()
 export class SetDeliveryAsDeliveredUseCase {
-  constructor(private deliveriesRepository: IDeliveriesRepository) {}
+  constructor(
+    private deliveriesRepository: IDeliveriesRepository,
+    private attachmentsRepository: IAttachmentsRepository,
+  ) {}
 
   async execute({
     deliveryId,
@@ -31,6 +37,13 @@ export class SetDeliveryAsDeliveredUseCase {
 
     if (delivery.deliverymanId !== deliverymanId) {
       throw new NotAllowedError()
+    }
+
+    const attachmentsIsValid =
+      await this.attachmentsRepository.findManyByIds(attachmentsIds)
+
+    if (attachmentsIsValid.length < 1) {
+      throw new AttachmentsNotFoundError()
     }
 
     const attachments = attachmentsIds.map((attachmentId) => {

@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common'
 import { IDeliveriesRepository } from '../../repositories/IDeliveriesRepository'
 import { ResourceNotFoundError } from '@/core/errors/errors/resourceNotFoundError'
 
@@ -6,7 +7,7 @@ interface DeleteDeliveryRequest {
 }
 
 interface DeleteDeliveryResponse {}
-
+@Injectable()
 export class DeleteDeliveryUseCase {
   constructor(private deliveriesRepository: IDeliveriesRepository) {}
 

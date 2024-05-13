@@ -27,6 +27,7 @@ export class PrismaDeliverymanRepository implements IDeliverymanRepository {
     const deliveryman = await this.prismaService.user.findUnique({
       where: {
         document,
+        isDeliveryman: true,
       },
     })
 
@@ -41,6 +42,7 @@ export class PrismaDeliverymanRepository implements IDeliverymanRepository {
     const deliveryman = await this.prismaService.user.findUnique({
       where: {
         email,
+        isDeliveryman: true,
       },
     })
 
@@ -55,6 +57,7 @@ export class PrismaDeliverymanRepository implements IDeliverymanRepository {
     const deliveryman = await this.prismaService.user.findUnique({
       where: {
         id: deliverymanId,
+        isDeliveryman: true,
       },
     })
 

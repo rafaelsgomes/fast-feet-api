@@ -7,4 +7,22 @@ export class InMemoryAttachmentsRepository implements IAttachmentsRepository {
   async create(attachment: Attachment): Promise<void> {
     this.items.push(attachment)
   }
+
+  async findById(attachmentId: string): Promise<Attachment | null> {
+    const attachment = this.items.find((item) => item.id === attachmentId)
+
+    if (!attachment) {
+      return null
+    }
+
+    return attachment
+  }
+
+  async findManyByIds(attachmentIds: string[]): Promise<Attachment[]> {
+    const attachments = this.items.filter((item) =>
+      attachmentIds.includes(item.id),
+    )
+
+    return attachments
+  }
 }

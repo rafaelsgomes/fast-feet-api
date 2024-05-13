@@ -7,7 +7,7 @@ export class RecipientPresenter {
       document: recipient.document,
       name: recipient.name,
       email: recipient.email,
-      createdAt: recipient.createdAt,
+      created_at: recipient.createdAt,
     }
   }
 }

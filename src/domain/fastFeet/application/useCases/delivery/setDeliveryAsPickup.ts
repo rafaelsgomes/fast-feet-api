@@ -4,6 +4,7 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resourceNotFoundErro
 import { IDeliverymanRepository } from '../../repositories/IDeliverymanRepository'
 import { UserNotFoundError } from '../_errors/userNotFoundError'
 import { DeliveryIsNotAvailableError } from '../_errors/deliveryIsNotAvailableError'
+import { Injectable } from '@nestjs/common'
 
 interface SetDeliveryAsPickupRequest {
   deliveryId: string
@@ -13,7 +14,7 @@ interface SetDeliveryAsPickupRequest {
 interface SetDeliveryAsPickupResponse {
   delivery: Delivery
 }
-
+@Injectable()
 export class SetDeliveryAsPickupUseCase {
   constructor(
     private deliveriesRepository: IDeliveriesRepository,
@@ -24,16 +25,16 @@ export class SetDeliveryAsPickupUseCase {
     deliveryId,
     deliverymanId,
   }: SetDeliveryAsPickupRequest): Promise<SetDeliveryAsPickupResponse> {
-    const deliveryman = await this.deliverymanRepository.findById(deliverymanId)
-
-    if (!deliveryman) {
-      throw new UserNotFoundError(deliveryId)
-    }
-
     const delivery = await this.deliveriesRepository.findById(deliveryId)
 
     if (!delivery) {
       throw new ResourceNotFoundError()
+    }
+
+    const deliveryman = await this.deliverymanRepository.findById(deliverymanId)
+
+    if (!deliveryman) {
+      throw new UserNotFoundError(deliveryId)
     }
 
     if (!delivery.availableAt) {

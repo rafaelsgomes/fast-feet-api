@@ -1,6 +1,7 @@
 import { Delivery } from '@/domain/fastFeet/enterprise/entities/delivery'
 import { IDeliveriesRepository } from '../../repositories/IDeliveriesRepository'
 import { ResourceNotFoundError } from '@/core/errors/errors/resourceNotFoundError'
+import { Injectable } from '@nestjs/common'
 
 interface SetDeliveryAsReturnedRequest {
   deliveryId: string
@@ -9,7 +10,7 @@ interface SetDeliveryAsReturnedRequest {
 interface SetDeliveryAsReturnedResponse {
   delivery: Delivery
 }
-
+@Injectable()
 export class SetDeliveryAsReturnedUseCase {
   constructor(private deliveriesRepository: IDeliveriesRepository) {}
 

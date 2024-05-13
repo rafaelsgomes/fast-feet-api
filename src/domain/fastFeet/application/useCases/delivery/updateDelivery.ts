@@ -5,6 +5,7 @@ import { IDeliverymanRepository } from '../../repositories/IDeliverymanRepositor
 import { UserNotFoundError } from '../_errors/userNotFoundError'
 import { IRecipientRepository } from '../../repositories/IRecipientRepository'
 import { InformationNotProvidedError } from '../_errors/informationNotProvidedError'
+import { Injectable } from '@nestjs/common'
 
 interface UpdateDeliveryRequest {
   deliveryId: string
@@ -26,7 +27,7 @@ interface UpdateDeliveryRequest {
 interface UpdateDeliveryResponse {
   delivery: Delivery
 }
-
+@Injectable()
 export class UpdateDeliveryUseCase {
   constructor(
     private deliveriesRepository: IDeliveriesRepository,

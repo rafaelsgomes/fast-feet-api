@@ -28,21 +28,20 @@ describe('Get Recipient (E2E)', () => {
     await app.init()
   })
 
-  test(`[GET] /admin/recipient/email?email=john@doe.com`, async () => {
+  test(`[GET] /recipient/email?email=john@doe.com`, async () => {
     const admin = await adminFactory.makePrismaAdmin()
 
-    const recipient = await recipientFactory.makePrismaRecipient({
+    await recipientFactory.makePrismaRecipient({
       email: 'john@doe.com',
     })
-
     const accessToken = jwtService.sign({
       sub: admin.id,
     })
 
     const response = await request(app.getHttpServer())
-      .get(`/admin/recipient/email`)
+      .get(`/recipient/email`)
       .query({
-        email: recipient.email,
+        email: 'john@doe.com',
       })
       .set('Authorization', `Bearer ${accessToken}`)
       .send()

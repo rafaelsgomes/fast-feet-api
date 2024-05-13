@@ -11,7 +11,7 @@ import { UserNotFoundError } from '@/domain/fastFeet/application/useCases/_error
 import { Roles } from '@/infra/authorization/roles.decorator'
 import { Role } from '@/domain/fastFeet/enterprise/entities/role.enum'
 
-@Controller('/deliveryman/:deliverymanId')
+@Controller('/:deliverymanId')
 export class DeleteDeliverymanController {
   constructor(private deleteDeliveryman: DeleteDeliverymanUseCase) {}
   @Delete()

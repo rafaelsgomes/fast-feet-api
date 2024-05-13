@@ -10,26 +10,32 @@ import { makeRecipient } from 'test/factories/makeRecipient'
 import { InformationNotProvidedError } from '../_errors/informationNotProvidedError'
 import { faker } from '@faker-js/faker'
 import { InMemoryDeliveriesAttachmentsRepository } from 'test/repositories/inMemoryDeliveriesAttachmentsRepository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/inMemoryAttachmentsRepository'
 
 let repository: InMemoryDeliveriesRepository
-let deliverymanRepository: InMemoryDeliverymanRepository
-let recipientRepository: InMemoryRecipientRepository
 let deliveriesAttachmentsRepository: InMemoryDeliveriesAttachmentsRepository
+let attachmentsRepository: InMemoryAttachmentsRepository
+let deliverymanRepository: InMemoryDeliverymanRepository
+let recipientsRepository: InMemoryRecipientRepository
 let sut: UpdateDeliveryUseCase
 
 describe('Update delivery', () => {
   beforeEach(() => {
     deliveriesAttachmentsRepository =
       new InMemoryDeliveriesAttachmentsRepository()
+    attachmentsRepository = new InMemoryAttachmentsRepository()
+    deliverymanRepository = new InMemoryDeliverymanRepository()
+    recipientsRepository = new InMemoryRecipientRepository()
     repository = new InMemoryDeliveriesRepository(
       deliveriesAttachmentsRepository,
+      attachmentsRepository,
+      deliverymanRepository,
+      recipientsRepository,
     )
-    deliverymanRepository = new InMemoryDeliverymanRepository()
-    recipientRepository = new InMemoryRecipientRepository()
     sut = new UpdateDeliveryUseCase(
       repository,
       deliverymanRepository,
-      recipientRepository,
+      recipientsRepository,
     )
   })
 
@@ -200,7 +206,7 @@ describe('Update delivery', () => {
 
   it('should be able to update a delivery recipient', async () => {
     const recipient = makeRecipient()
-    await recipientRepository.create(recipient)
+    await recipientsRepository.create(recipient)
 
     const deliveryOnDatabase = makeDelivery()
     await repository.create(deliveryOnDatabase)

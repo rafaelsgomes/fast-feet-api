@@ -6,38 +6,33 @@ import { DatabaseModule } from '@/infra/database/database.module'
 import { RecipientFactory } from 'test/factories/makeRecipient'
 import { JwtService } from '@nestjs/jwt'
 import { PrismaService } from '@/infra/database/prisma.service'
+import { AdminFactory } from 'test/factories/makeAdmin'
 
 describe('Delete Recipient (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let recipientFactory: RecipientFactory
+  let adminFactory: AdminFactory
   let jwtService: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [RecipientFactory],
+      providers: [RecipientFactory, AdminFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
     recipientFactory = moduleRef.get(RecipientFactory)
+    adminFactory = moduleRef.get(AdminFactory)
     jwtService = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test(`[DELETE] /admin/recipient`, async () => {
-    const admin = await prisma.user.create({
-      data: {
-        document: '01234567899',
-        name: 'John Doe',
-        email: 'john@doe.com',
-        password: 'johnDoe123456789',
-        roles: ['ADMIN'],
-      },
-    })
+  test(`[DELETE] /recipient/:recipientId`, async () => {
+    const admin = await adminFactory.makePrismaAdmin()
 
     const recipient = await recipientFactory.makePrismaRecipient({
       document: '12345678900',
@@ -48,7 +43,7 @@ describe('Delete Recipient (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .delete(`/admin/recipient/${recipient.id}`)
+      .delete(`/recipient/${recipient.id}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 

@@ -1,14 +1,21 @@
+import { IAttachmentsRepository } from '@/domain/fastFeet/application/repositories/IAttachmentsRepository'
 import { IDeliveryAttachmentsRepository } from '@/domain/fastFeet/application/repositories/IDeliveriesAttachmentsRepository'
 import {
   FindManyNearByParams,
   IDeliveriesRepository,
 } from '@/domain/fastFeet/application/repositories/IDeliveriesRepository'
+import { IDeliverymanRepository } from '@/domain/fastFeet/application/repositories/IDeliverymanRepository'
+import { IRecipientRepository } from '@/domain/fastFeet/application/repositories/IRecipientRepository'
 import { Delivery } from '@/domain/fastFeet/enterprise/entities/delivery'
+import { DeliveryDetails } from '@/domain/fastFeet/enterprise/entities/valueObjects/deliveryDetails'
 import { getDistanceBetweenCoordinates } from 'test/utils/getDistanceBetweenCoordinates'
 
 export class InMemoryDeliveriesRepository implements IDeliveriesRepository {
   constructor(
     private deliveryAttachmentsRepository: IDeliveryAttachmentsRepository,
+    private attachmentsRepository: IAttachmentsRepository,
+    private deliverymanRepository: IDeliverymanRepository,
+    private recipientRepository: IRecipientRepository,
   ) {}
 
   public items: Delivery[] = []
@@ -43,6 +50,59 @@ export class InMemoryDeliveriesRepository implements IDeliveriesRepository {
     }
 
     return delivery
+  }
+
+  async findDetailsById(deliveryId: string): Promise<DeliveryDetails> {
+    const delivery = this.items.find((item) => item.id === deliveryId)
+
+    if (!delivery) {
+      return null
+    }
+
+    const recipient = await this.recipientRepository.findById(
+      delivery.recipientId,
+    )
+
+    const deliveryman = await this.deliverymanRepository.findById(
+      delivery.deliverymanId,
+    )
+
+    const deliveryAttachments =
+      await this.deliveryAttachmentsRepository.findManyByDeliveryId(deliveryId)
+
+    const attachments = await Promise.all(
+      deliveryAttachments.map(async (item) => {
+        const attachment = await this.attachmentsRepository.findById(item.id)
+
+        if (!attachment) {
+          throw new Error(
+            `Attachment with ID "${item.attachmentId}" does not exists.`,
+          )
+        }
+
+        return attachment
+      }),
+    )
+
+    return DeliveryDetails.create({
+      additionalAddressInformation: delivery.additionalAddressInformation,
+      address: delivery.address,
+      attachments,
+      city: delivery.city,
+      createdAt: delivery.createdAt,
+      deliveryId: delivery.id,
+      recipientId: recipient ? recipient.id : null,
+      recipientName: recipient ? recipient.name : null,
+      state: delivery.state,
+      zipCode: delivery.zipCode,
+      availableAt: delivery.availableAt,
+      deliveredAt: delivery.deliveredAt,
+      deliverymanId: deliveryman ? deliveryman.id : null,
+      deliverymanName: deliveryman ? deliveryman.name : null,
+      pickupAt: delivery.pickupAt,
+      returnedAt: delivery.returnedAt,
+      updatedAt: delivery.updatedAt,
+    })
   }
 
   async findManyByRecipientId(recipientId: string): Promise<Delivery[]> {

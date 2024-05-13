@@ -27,6 +27,7 @@ export class PrismaRecipientRepository implements IRecipientRepository {
     const recipient = await this.prismaService.user.findUnique({
       where: {
         document,
+        isDeliveryman: false,
       },
     })
 
@@ -41,6 +42,7 @@ export class PrismaRecipientRepository implements IRecipientRepository {
     const recipient = await this.prismaService.user.findUnique({
       where: {
         email,
+        isDeliveryman: false,
       },
     })
 
@@ -55,6 +57,7 @@ export class PrismaRecipientRepository implements IRecipientRepository {
     const recipient = await this.prismaService.user.findUnique({
       where: {
         id: recipientId,
+        isDeliveryman: false,
       },
     })
 

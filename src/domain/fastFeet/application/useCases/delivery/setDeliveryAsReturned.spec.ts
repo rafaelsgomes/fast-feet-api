@@ -3,17 +3,29 @@ import { SetDeliveryAsReturnedUseCase } from './setDeliveryAsReturned'
 import { makeDelivery } from 'test/factories/makeDelivery'
 import { ResourceNotFoundError } from '@/core/errors/errors/resourceNotFoundError'
 import { InMemoryDeliveriesAttachmentsRepository } from 'test/repositories/inMemoryDeliveriesAttachmentsRepository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/inMemoryAttachmentsRepository'
+import { InMemoryDeliverymanRepository } from 'test/repositories/inMemoryDeliverymanRepository'
+import { InMemoryRecipientRepository } from 'test/repositories/inMemoryRecipientRepository'
 
 let repository: InMemoryDeliveriesRepository
 let deliveriesAttachmentsRepository: InMemoryDeliveriesAttachmentsRepository
+let attachmentsRepository: InMemoryAttachmentsRepository
+let deliverymanRepository: InMemoryDeliverymanRepository
+let recipientsRepository: InMemoryRecipientRepository
 let sut: SetDeliveryAsReturnedUseCase
 
 describe('Set a delivery as pickup', () => {
   beforeEach(() => {
     deliveriesAttachmentsRepository =
       new InMemoryDeliveriesAttachmentsRepository()
+    attachmentsRepository = new InMemoryAttachmentsRepository()
+    deliverymanRepository = new InMemoryDeliverymanRepository()
+    recipientsRepository = new InMemoryRecipientRepository()
     repository = new InMemoryDeliveriesRepository(
       deliveriesAttachmentsRepository,
+      attachmentsRepository,
+      deliverymanRepository,
+      recipientsRepository,
     )
     sut = new SetDeliveryAsReturnedUseCase(repository)
   })

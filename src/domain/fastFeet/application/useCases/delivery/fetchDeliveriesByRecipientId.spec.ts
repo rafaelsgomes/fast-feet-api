@@ -3,17 +3,29 @@ import { FetchDeliveriesByRecipientIdUseCase } from './fetchDeliveriesByRecipien
 import { makeDelivery } from 'test/factories/makeDelivery'
 import { makeRecipient } from 'test/factories/makeRecipient'
 import { InMemoryDeliveriesAttachmentsRepository } from 'test/repositories/inMemoryDeliveriesAttachmentsRepository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/inMemoryAttachmentsRepository'
+import { InMemoryDeliverymanRepository } from 'test/repositories/inMemoryDeliverymanRepository'
+import { InMemoryRecipientRepository } from 'test/repositories/inMemoryRecipientRepository'
 
 let repository: InMemoryDeliveriesRepository
 let deliveriesAttachmentsRepository: InMemoryDeliveriesAttachmentsRepository
+let attachmentsRepository: InMemoryAttachmentsRepository
+let deliverymanRepository: InMemoryDeliverymanRepository
+let recipientsRepository: InMemoryRecipientRepository
 let sut: FetchDeliveriesByRecipientIdUseCase
 
 describe('Fetch Deliveries By RecipientId', () => {
   beforeEach(() => {
     deliveriesAttachmentsRepository =
       new InMemoryDeliveriesAttachmentsRepository()
+    attachmentsRepository = new InMemoryAttachmentsRepository()
+    deliverymanRepository = new InMemoryDeliverymanRepository()
+    recipientsRepository = new InMemoryRecipientRepository()
     repository = new InMemoryDeliveriesRepository(
       deliveriesAttachmentsRepository,
+      attachmentsRepository,
+      deliverymanRepository,
+      recipientsRepository,
     )
     sut = new FetchDeliveriesByRecipientIdUseCase(repository)
   })

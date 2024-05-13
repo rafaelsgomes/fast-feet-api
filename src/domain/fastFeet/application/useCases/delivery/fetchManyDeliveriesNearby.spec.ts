@@ -4,18 +4,28 @@ import { InMemoryDeliveriesAttachmentsRepository } from 'test/repositories/inMem
 import { makeDelivery } from 'test/factories/makeDelivery'
 import { makeDeliveryman } from 'test/factories/makeDeliveryman'
 import { InMemoryDeliverymanRepository } from 'test/repositories/inMemoryDeliverymanRepository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/inMemoryAttachmentsRepository'
+import { InMemoryRecipientRepository } from 'test/repositories/inMemoryRecipientRepository'
 
 let repository: InMemoryDeliveriesRepository
 let deliveriesAttachmentsRepository: InMemoryDeliveriesAttachmentsRepository
+let attachmentsRepository: InMemoryAttachmentsRepository
 let deliverymanRepository: InMemoryDeliverymanRepository
+let recipientsRepository: InMemoryRecipientRepository
 let sut: FetchManyDeliveriesNearbyUseCase
 
 describe('Fetch Deliveries Nearby', () => {
   beforeEach(async () => {
     deliveriesAttachmentsRepository =
       new InMemoryDeliveriesAttachmentsRepository()
+    attachmentsRepository = new InMemoryAttachmentsRepository()
+    deliverymanRepository = new InMemoryDeliverymanRepository()
+    recipientsRepository = new InMemoryRecipientRepository()
     repository = new InMemoryDeliveriesRepository(
       deliveriesAttachmentsRepository,
+      attachmentsRepository,
+      deliverymanRepository,
+      recipientsRepository,
     )
     deliverymanRepository = new InMemoryDeliverymanRepository()
     sut = new FetchManyDeliveriesNearbyUseCase(repository)

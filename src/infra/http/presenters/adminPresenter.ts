@@ -7,7 +7,7 @@ export class AdminPresenter {
       document: admin.document,
       name: admin.name,
       email: admin.email,
-      createdAt: admin.createdAt,
+      created_at: admin.createdAt,
     }
   }
 }

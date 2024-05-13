@@ -6,38 +6,33 @@ import { DatabaseModule } from '@/infra/database/database.module'
 import { DeliverymanFactory } from 'test/factories/makeDeliveryman'
 import { JwtService } from '@nestjs/jwt'
 import { PrismaService } from '@/infra/database/prisma.service'
+import { AdminFactory } from 'test/factories/makeAdmin'
 
 describe('Delete Deliveryman (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let deliverymanFactory: DeliverymanFactory
+  let adminFactory: AdminFactory
   let jwtService: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [DeliverymanFactory],
+      providers: [DeliverymanFactory, AdminFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
     deliverymanFactory = moduleRef.get(DeliverymanFactory)
+    adminFactory = moduleRef.get(AdminFactory)
     jwtService = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test(`[DELETE] /admin/deliveryman`, async () => {
-    const admin = await prisma.user.create({
-      data: {
-        document: '01234567899',
-        name: 'John Doe',
-        email: 'john@doe.com',
-        password: 'johnDoe123456789',
-        roles: ['ADMIN'],
-      },
-    })
+  test(`[DELETE] /deliveryman/:deliverymanId`, async () => {
+    const admin = await adminFactory.makePrismaAdmin()
 
     const deliveryman = await deliverymanFactory.makePrismaDeliveryman({
       document: '12345678900',
@@ -48,7 +43,7 @@ describe('Delete Deliveryman (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .delete(`/admin/deliveryman/${deliveryman.id}`)
+      .delete(`/deliveryman/${deliveryman.id}`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 

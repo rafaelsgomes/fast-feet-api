@@ -19,6 +19,7 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.574.0",
     "@casl/ability": "^6.7.1",
     "@casl/prisma": "^1.4.1",
     "@nestjs/common": "^10.0.0",
@@ -45,6 +46,7 @@
     "@swc/core": "^1.4.16",
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^4.17.17",
+    "@types/multer": "^1.4.11",
     "@types/node": "^20.3.1",
     "@types/passport-jwt": "^4.0.1",
     "@types/supertest": "^6.0.0",

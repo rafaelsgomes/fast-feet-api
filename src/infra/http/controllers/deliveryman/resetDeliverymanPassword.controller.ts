@@ -27,7 +27,7 @@ type resetDeliverymanPasswordBody = z.infer<
   typeof resetDeliverymanPasswordBodySchema
 >
 
-@Controller('/deliveryman/reset-password')
+@Controller('/reset-password')
 export class ResetPasswordDeliverymanController {
   constructor(
     private resetDeliverymanPassword: ResetDeliverymanPasswordUseCase,

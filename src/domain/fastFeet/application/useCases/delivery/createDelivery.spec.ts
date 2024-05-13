@@ -5,9 +5,13 @@ import { makeRecipient } from 'test/factories/makeRecipient'
 import { faker } from '@faker-js/faker'
 import { UserNotFoundError } from '../_errors/userNotFoundError'
 import { InMemoryDeliveriesAttachmentsRepository } from 'test/repositories/inMemoryDeliveriesAttachmentsRepository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/inMemoryAttachmentsRepository'
+import { InMemoryDeliverymanRepository } from 'test/repositories/inMemoryDeliverymanRepository'
 
 let repository: InMemoryDeliveriesRepository
 let deliveriesAttachmentsRepository: InMemoryDeliveriesAttachmentsRepository
+let attachmentsRepository: InMemoryAttachmentsRepository
+let deliverymanRepository: InMemoryDeliverymanRepository
 let recipientsRepository: InMemoryRecipientRepository
 let sut: CreateDeliveryUseCase
 
@@ -15,10 +19,15 @@ describe('Create delivery', () => {
   beforeEach(() => {
     deliveriesAttachmentsRepository =
       new InMemoryDeliveriesAttachmentsRepository()
+    attachmentsRepository = new InMemoryAttachmentsRepository()
+    deliverymanRepository = new InMemoryDeliverymanRepository()
+    recipientsRepository = new InMemoryRecipientRepository()
     repository = new InMemoryDeliveriesRepository(
       deliveriesAttachmentsRepository,
+      attachmentsRepository,
+      deliverymanRepository,
+      recipientsRepository,
     )
-    recipientsRepository = new InMemoryRecipientRepository()
     sut = new CreateDeliveryUseCase(repository, recipientsRepository)
   })
   it('should be able create a delivery', async () => {

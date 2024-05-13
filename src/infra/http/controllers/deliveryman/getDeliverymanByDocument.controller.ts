@@ -11,7 +11,7 @@ import { DeliverymanPresenter } from '../../presenters/deliverymanPresenter'
 import { Roles } from '@/infra/authorization/roles.decorator'
 import { Role } from '@/domain/fastFeet/enterprise/entities/role.enum'
 
-@Controller('/deliveryman/document')
+@Controller('/document')
 export class GetDeliverymanByDocumentController {
   constructor(
     private getDeliverymanByDocument: GetDeliverymanByDocumentUseCase,

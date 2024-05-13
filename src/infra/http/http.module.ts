@@ -5,6 +5,7 @@ import { AdminHttpModule } from './controllers/admin/adminHttp.module'
 import { RouterModule } from '@nestjs/core'
 import { DeliverymanHttpModule } from './controllers/deliveryman/deliverymanHttp.module'
 import { RecipientHttpModule } from './controllers/recipient/recipientHttp.module'
+import { DeliveryHttpModule } from './controllers/delivery/deliveryHttp.module'
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { RecipientHttpModule } from './controllers/recipient/recipientHttp.modul
     AdminHttpModule,
     DeliverymanHttpModule,
     RecipientHttpModule,
+    DeliveryHttpModule,
     RouterModule.register([
       {
         path: 'admin',
@@ -25,6 +27,10 @@ import { RecipientHttpModule } from './controllers/recipient/recipientHttp.modul
       {
         path: 'recipient',
         module: RecipientHttpModule,
+      },
+      {
+        path: 'delivery',
+        module: DeliveryHttpModule,
       },
     ]),
   ],

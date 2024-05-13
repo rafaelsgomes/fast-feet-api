@@ -2,6 +2,7 @@ import { Delivery } from '@/domain/fastFeet/enterprise/entities/delivery'
 import { IDeliveriesRepository } from '../../repositories/IDeliveriesRepository'
 import { IRecipientRepository } from '../../repositories/IRecipientRepository'
 import { UserNotFoundError } from '../_errors/userNotFoundError'
+import { Injectable } from '@nestjs/common'
 
 interface CreateDeliveryRequest {
   longitude: number
@@ -17,7 +18,7 @@ interface CreateDeliveryRequest {
 interface CreateDeliveryResponse {
   delivery: Delivery
 }
-
+@Injectable()
 export class CreateDeliveryUseCase {
   constructor(
     private deliveriesRepository: IDeliveriesRepository,

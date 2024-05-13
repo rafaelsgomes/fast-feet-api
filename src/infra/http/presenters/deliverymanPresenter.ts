@@ -7,7 +7,7 @@ export class DeliverymanPresenter {
       document: deliveryman.document,
       name: deliveryman.name,
       email: deliveryman.email,
-      createdAt: deliveryman.createdAt,
+      created_at: deliveryman.createdAt,
     }
   }
 }

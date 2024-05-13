@@ -7,7 +7,7 @@ import { RecipientFactory } from 'test/factories/makeRecipient'
 import { JwtService } from '@nestjs/jwt'
 import { AdminFactory } from 'test/factories/makeAdmin'
 
-describe('Get Recipient (E2E)', () => {
+describe('Get Recipient By Document (E2E)', () => {
   let app: INestApplication
   let recipientFactory: RecipientFactory
   let adminFactory: AdminFactory
@@ -28,7 +28,7 @@ describe('Get Recipient (E2E)', () => {
     await app.init()
   })
 
-  test(`[GET] /admin/recipient/document?document=12345678900`, async () => {
+  test(`[GET] /recipient/document?document=12345678900`, async () => {
     const admin = await adminFactory.makePrismaAdmin()
 
     const recipient = await recipientFactory.makePrismaRecipient({
@@ -40,7 +40,7 @@ describe('Get Recipient (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .get(`/admin/recipient/document`)
+      .get(`/recipient/document`)
       .query({
         document: recipient.document,
       })

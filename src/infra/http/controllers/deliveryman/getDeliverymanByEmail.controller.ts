@@ -11,7 +11,7 @@ import { DeliverymanPresenter } from '../../presenters/deliverymanPresenter'
 import { Roles } from '@/infra/authorization/roles.decorator'
 import { Role } from '@/domain/fastFeet/enterprise/entities/role.enum'
 
-@Controller('/deliveryman/email')
+@Controller('/email')
 export class GetDeliverymanByEmailController {
   constructor(private getDeliverymanByEmail: GetDeliverymanByEmailUseCase) {}
 

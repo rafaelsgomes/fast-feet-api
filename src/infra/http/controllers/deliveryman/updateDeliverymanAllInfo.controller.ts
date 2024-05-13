@@ -27,7 +27,7 @@ const updateDeliverymanBodyPipe = new ZodValidationPipe(
 
 type updateDeliverymanBody = z.infer<typeof updateDeliverymanBodySchema>
 
-@Controller('/deliveryman/:deliverymanId')
+@Controller(':deliverymanId/all')
 export class UpdateDeliverymanAllInfoController {
   constructor(private updateDeliveryman: UpdateDeliverymanAllInfoUseCase) {}
 

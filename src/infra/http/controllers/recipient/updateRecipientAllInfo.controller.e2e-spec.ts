@@ -31,7 +31,7 @@ describe('Update Recipient All Info (E2E)', () => {
     await app.init()
   })
 
-  test(`[PUT] /admin/recipient/:recipientId`, async () => {
+  test(`[PUT] /recipient/:recipientId/all`, async () => {
     const admin = await adminFactory.makePrismaAdmin()
     const recipient = await recipientFactory.makePrismaRecipient()
 
@@ -40,7 +40,7 @@ describe('Update Recipient All Info (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .put(`/admin/recipient/${recipient.id}`)
+      .put(`/recipient/${recipient.id}/all`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         email: 'john@doe.com',

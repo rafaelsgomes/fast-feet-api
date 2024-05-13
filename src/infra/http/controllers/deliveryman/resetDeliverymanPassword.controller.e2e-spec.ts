@@ -6,38 +6,34 @@ import { DatabaseModule } from '@/infra/database/database.module'
 import { DeliverymanFactory } from 'test/factories/makeDeliveryman'
 import { JwtService } from '@nestjs/jwt'
 import { PrismaService } from '@/infra/database/prisma.service'
+import { AdminFactory } from 'test/factories/makeAdmin'
+import { compare } from 'bcryptjs'
 
 describe('Reset deliveryman password  (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let deliverymanFactory: DeliverymanFactory
+  let adminFactory: AdminFactory
   let jwtService: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [DeliverymanFactory],
+      providers: [DeliverymanFactory, AdminFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
     deliverymanFactory = moduleRef.get(DeliverymanFactory)
+    adminFactory = moduleRef.get(AdminFactory)
     jwtService = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test(`[PATCH] /admin/deliveryman/reset-password`, async () => {
-    const admin = await prisma.user.create({
-      data: {
-        document: '01234567899',
-        name: 'John Doe',
-        email: 'john@doe.com',
-        password: 'johnDoe123456789',
-        roles: ['ADMIN'],
-      },
-    })
+  test(`[PATCH] /deliveryman/reset-password`, async () => {
+    const admin = await adminFactory.makePrismaAdmin()
 
     const deliveryman = await deliverymanFactory.makePrismaDeliveryman({
       document: '12345678900',
@@ -47,7 +43,7 @@ describe('Reset deliveryman password  (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .patch('/admin/deliveryman/reset-password')
+      .patch('/deliveryman/reset-password')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         deliverymanId: deliveryman.id,
@@ -62,7 +58,13 @@ describe('Reset deliveryman password  (E2E)', () => {
       },
     })
 
+    const passwordIsValid = compare(
+      'johnDoe123',
+      deliverymanOnDatabase.password,
+    )
+
     expect(deliverymanOnDatabase.updatedAt).toBeTruthy()
+    expect(passwordIsValid).toBeTruthy()
   })
 
   afterAll(async () => {

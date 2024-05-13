@@ -1,5 +1,6 @@
 import { Delivery } from '@/domain/fastFeet/enterprise/entities/delivery'
 import { IDeliveriesRepository } from '../../repositories/IDeliveriesRepository'
+import { Injectable } from '@nestjs/common'
 
 interface FetchDeliveriesByDeliverymanIdRequest {
   deliverymanId: string
@@ -8,7 +9,7 @@ interface FetchDeliveriesByDeliverymanIdRequest {
 interface FetchDeliveriesByDeliverymanIdResponse {
   deliveries: Delivery[]
 }
-
+@Injectable()
 export class FetchDeliveriesByDeliverymanIdUseCase {
   constructor(private deliveriesRepository: IDeliveriesRepository) {}
 

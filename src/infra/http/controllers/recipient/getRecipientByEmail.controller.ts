@@ -11,7 +11,7 @@ import { RecipientPresenter } from '../../presenters/recipientPresenter'
 import { Roles } from '@/infra/authorization/roles.decorator'
 import { Role } from '@/domain/fastFeet/enterprise/entities/role.enum'
 
-@Controller('/recipient/email')
+@Controller('/email')
 export class GetRecipientByEmailController {
   constructor(private getRecipientByEmail: GetRecipientByEmailUseCase) {}
 
