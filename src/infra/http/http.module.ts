@@ -6,6 +6,7 @@ import { RouterModule } from '@nestjs/core'
 import { DeliverymanHttpModule } from './controllers/deliveryman/deliverymanHttp.module'
 import { RecipientHttpModule } from './controllers/recipient/recipientHttp.module'
 import { DeliveryHttpModule } from './controllers/delivery/deliveryHttp.module'
+import { NotificationHttpModule } from './controllers/notification/notificationHttp.module'
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { DeliveryHttpModule } from './controllers/delivery/deliveryHttp.module'
     DeliverymanHttpModule,
     RecipientHttpModule,
     DeliveryHttpModule,
+    NotificationHttpModule,
     RouterModule.register([
       {
         path: 'admin',
@@ -31,6 +33,10 @@ import { DeliveryHttpModule } from './controllers/delivery/deliveryHttp.module'
       {
         path: 'delivery',
         module: DeliveryHttpModule,
+      },
+      {
+        path: 'notification',
+        module: NotificationHttpModule,
       },
     ]),
   ],

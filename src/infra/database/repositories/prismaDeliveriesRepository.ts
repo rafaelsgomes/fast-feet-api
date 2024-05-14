@@ -8,6 +8,7 @@ import {
 } from '@/domain/fastFeet/application/repositories/IDeliveriesRepository'
 import { DeliveryDetails } from '@/domain/fastFeet/enterprise/entities/valueObjects/deliveryDetails'
 import { PrismaDeliveryDetailsMapper } from '../mappers/prismaDeliveryDetailsMapper'
+import { DomainEvents } from '@/core/events/domainEvents'
 
 interface fetchDeliveriesNearby {
   id: string
@@ -20,6 +21,8 @@ export class PrismaDeliveriesRepository implements IDeliveriesRepository {
     await this.prismaService.delivery.create({
       data: PrismaDeliveryMapper.toDatabase(delivery),
     })
+
+    DomainEvents.dispatchEventsForAggregate(delivery.id)
   }
 
   async save(delivery: Delivery) {
@@ -29,6 +32,8 @@ export class PrismaDeliveriesRepository implements IDeliveriesRepository {
       },
       data: PrismaDeliveryMapper.toDatabase(delivery),
     })
+
+    DomainEvents.dispatchEventsForAggregate(delivery.id)
   }
 
   async findById(deliveryId: string) {

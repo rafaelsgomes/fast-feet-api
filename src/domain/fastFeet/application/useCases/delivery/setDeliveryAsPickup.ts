@@ -43,8 +43,7 @@ export class SetDeliveryAsPickupUseCase {
 
     if (delivery.pickupAt) return { delivery }
 
-    delivery.pickupAt = new Date()
-    delivery.deliverymanId = deliverymanId
+    delivery.setPickup(deliverymanId)
 
     this.deliveriesRepository.save(delivery)
 

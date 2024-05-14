@@ -1,3 +1,4 @@
+import { DomainEvents } from '@/core/events/domainEvents'
 import { IAttachmentsRepository } from '@/domain/fastFeet/application/repositories/IAttachmentsRepository'
 import { IDeliveryAttachmentsRepository } from '@/domain/fastFeet/application/repositories/IDeliveriesAttachmentsRepository'
 import {
@@ -22,6 +23,8 @@ export class InMemoryDeliveriesRepository implements IDeliveriesRepository {
 
   async create(delivery: Delivery): Promise<void> {
     this.items.push(delivery)
+
+    DomainEvents.dispatchEventsForAggregate(delivery.id)
   }
 
   async save(delivery: Delivery): Promise<void> {
@@ -40,6 +43,8 @@ export class InMemoryDeliveriesRepository implements IDeliveriesRepository {
         delivery.attachments.getRemovedItems(),
       )
     }
+
+    DomainEvents.dispatchEventsForAggregate(delivery.id)
   }
 
   async findById(deliveryId: string): Promise<Delivery> {

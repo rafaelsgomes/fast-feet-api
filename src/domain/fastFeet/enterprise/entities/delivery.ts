@@ -1,6 +1,12 @@
-import { Entity } from '@/core/entities/entity'
 import { Optional } from '@/core/types/optional'
 import { DeliveryAttachmentList } from './deliveryAttachmentsList'
+import { AggregateRoot } from '@/core/entities/AggregateRoot'
+import { DeliveryCreatedEvent } from '../events/deliveryCreatedEvent'
+import { DeliveryAvailableEvent } from '../events/deliveryAvailableEvent'
+import { DeliveryPickupEvent } from '../events/deliveryPickupEvent'
+import { DeliveryAttachment } from './deliveryAttachment'
+import { DeliveryMadeEvent } from '../events/deliveryMadeEvent'
+import { DeliveryReturnedEvent } from '../events/deliveryReturnedEvent'
 
 export interface DeliveryProps {
   longitude: number
@@ -21,7 +27,7 @@ export interface DeliveryProps {
   updatedAt?: Date | null
 }
 
-export class Delivery extends Entity<DeliveryProps> {
+export class Delivery extends AggregateRoot<DeliveryProps> {
   get longitude() {
     return this.props.longitude
   }
@@ -112,6 +118,12 @@ export class Delivery extends Entity<DeliveryProps> {
     this.touch()
   }
 
+  setAvailable() {
+    this.props.availableAt = new Date()
+    this.touch()
+    this.addDomainEvent(new DeliveryAvailableEvent(this))
+  }
+
   get pickupAt() {
     return this.props.pickupAt
   }
@@ -119,6 +131,13 @@ export class Delivery extends Entity<DeliveryProps> {
   set pickupAt(pickupAt: Date | null) {
     this.props.pickupAt = pickupAt
     this.touch()
+  }
+
+  setPickup(deliverymanId: string) {
+    this.props.pickupAt = new Date()
+    this.props.deliverymanId = deliverymanId
+    this.touch()
+    this.addDomainEvent(new DeliveryPickupEvent(this))
   }
 
   get deliveredAt() {
@@ -130,6 +149,13 @@ export class Delivery extends Entity<DeliveryProps> {
     this.touch()
   }
 
+  setDelivered(attachments: DeliveryAttachment[]) {
+    this.attachments = new DeliveryAttachmentList(attachments)
+    this.props.deliveredAt = new Date()
+    this.touch()
+    this.addDomainEvent(new DeliveryMadeEvent(this))
+  }
+
   get returnedAt() {
     return this.props.returnedAt
   }
@@ -137,6 +163,12 @@ export class Delivery extends Entity<DeliveryProps> {
   set returnedAt(returnedAt: Date | null) {
     this.props.returnedAt = returnedAt
     this.touch()
+  }
+
+  setReturned() {
+    this.props.returnedAt = new Date()
+    this.touch()
+    this.addDomainEvent(new DeliveryReturnedEvent(this))
   }
 
   get attachments() {
@@ -171,6 +203,12 @@ export class Delivery extends Entity<DeliveryProps> {
       },
       id,
     )
+
+    const isNewDelivery = !id
+
+    if (isNewDelivery) {
+      delivery.addDomainEvent(new DeliveryCreatedEvent(delivery))
+    }
 
     return delivery
   }

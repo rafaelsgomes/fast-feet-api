@@ -12,6 +12,8 @@ import { IDeliveryAttachmentsRepository } from '@/domain/fastFeet/application/re
 import { PrismaDeliveryAttachmentsRepository } from './repositories/prismaDeliveriesAttachmentsRepository'
 import { IAttachmentsRepository } from '@/domain/fastFeet/application/repositories/IAttachmentsRepository'
 import { PrismaAttachmentsRepository } from './repositories/prismaAttachmentsRepository'
+import { INotificationsRepository } from '@/domain/notification/application/repositories/INotificationsRepository'
+import { PrismaNotificationsRepository } from './repositories/prismaNotificationsRepository'
 
 @Module({
   providers: [
@@ -40,6 +42,10 @@ import { PrismaAttachmentsRepository } from './repositories/prismaAttachmentsRep
       provide: IAttachmentsRepository,
       useClass: PrismaAttachmentsRepository,
     },
+    {
+      provide: INotificationsRepository,
+      useClass: PrismaNotificationsRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -49,6 +55,7 @@ import { PrismaAttachmentsRepository } from './repositories/prismaAttachmentsRep
     IDeliveriesRepository,
     IDeliveryAttachmentsRepository,
     IAttachmentsRepository,
+    INotificationsRepository,
   ],
 })
 export class DatabaseModule {}

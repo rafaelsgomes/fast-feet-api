@@ -54,7 +54,7 @@ $ pnpm run test:cov
 - [x] It must be possible to list deliveries with delivery addresses close to the delivery person's location;
 - [x] It must be possible to change a user's password;
 - [x] It must be possible to list a user's deliveries;
-- [] It must be possible to notify the recipient of each change in the delivery status.
+- [x] It must be possible to notify the recipient of each change in the delivery status.
 
 #### Conditions
 

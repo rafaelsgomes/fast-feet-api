@@ -25,7 +25,7 @@ export class SetDeliveryAsReturnedUseCase {
 
     if (delivery.returnedAt) return { delivery }
 
-    delivery.returnedAt = new Date()
+    delivery.setReturned()
 
     this.deliveriesRepository.save(delivery)
 

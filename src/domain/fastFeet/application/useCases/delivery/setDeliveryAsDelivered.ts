@@ -3,7 +3,6 @@ import { IDeliveriesRepository } from '../../repositories/IDeliveriesRepository'
 import { ResourceNotFoundError } from '@/core/errors/errors/resourceNotFoundError'
 import { NotAllowedError } from '../_errors/notAllowedError'
 import { DeliveryAttachment } from '@/domain/fastFeet/enterprise/entities/deliveryAttachment'
-import { DeliveryAttachmentList } from '@/domain/fastFeet/enterprise/entities/deliveryAttachmentsList'
 import { Injectable } from '@nestjs/common'
 import { IAttachmentsRepository } from '../../repositories/IAttachmentsRepository'
 import { AttachmentsNotFoundError } from '../_errors/attachmentsNotFoundError'
@@ -53,9 +52,7 @@ export class SetDeliveryAsDeliveredUseCase {
       })
     })
 
-    delivery.attachments = new DeliveryAttachmentList(attachments)
-
-    delivery.deliveredAt = new Date()
+    delivery.setDelivered(attachments)
 
     this.deliveriesRepository.save(delivery)
 

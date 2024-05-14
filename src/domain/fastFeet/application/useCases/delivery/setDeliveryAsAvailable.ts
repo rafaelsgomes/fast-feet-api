@@ -25,7 +25,7 @@ export class SetDeliveryAsAvailableUseCase {
 
     if (delivery.availableAt) return { delivery }
 
-    delivery.availableAt = new Date()
+    delivery.setAvailable()
 
     this.deliveriesRepository.save(delivery)
 
